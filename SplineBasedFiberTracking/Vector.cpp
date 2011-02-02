@@ -18,7 +18,7 @@ pbge::ModelInstance * Vector::createVectorInstance() {
 
     builder.on(vertex)
             .pushValue(0,0,0)
-            .pushValue(vector[0],vector[1],vector[2]).setAttribIndex(indices);
+            .pushValue((*vector)[0],(*vector)[1],(*vector)[2]).setAttribIndex(indices);
     builder.on(color)
             .pushValue(0,1,0)
             .pushValue(0,1,0).setAttribIndex(indices);

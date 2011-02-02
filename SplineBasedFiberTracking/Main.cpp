@@ -25,8 +25,8 @@ void setUp() {
 
     renderer = new pbge::Renderer(pbge::Manager::getInstance()->getOpenGL());
     scene = new pbge::SceneGraph(new pbge::TransformationNode);
-    pbge::Node * vectorPosNode = scene->appendChildTo(pbge::SceneGraph::ROOT, pbge::TransformationNode::translate(pos[0],pos[1],pos[2]));
-    cam_node_name = scene->appendChildTo(pbge::SceneGraph::ROOT, pbge::TransformationNode::translate(0, 0, 3))->getSceneGraphIndex();
+    pbge::Node * vectorPosNode = scene->appendChildTo(pbge::SceneGraph::ROOT, pbge::TransformationNode::translation(pos[0],pos[1],pos[2]));
+    cam_node_name = scene->appendChildTo(pbge::SceneGraph::ROOT, pbge::TransformationNode::translation(0, 0, 3))->getSceneGraphIndex();
     
     scene->appendChildTo(vectorPosNode, vboModel);
     pbge::CameraNode * cam = dynamic_cast<pbge::CameraNode*>(scene->appendChildTo(cam_node_name, new pbge::CameraNode()));

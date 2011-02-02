@@ -4,16 +4,16 @@
 #include "pbge/gfx/Model.h"
 #include "math3d/math3d.h"
 
-public class Vector {
+class Vector {
 public:
-    Vector(math3d::vector4 position_, math3d::vector4 vector_) {
-        position = position_;
-        vector = vector_;
+    Vector(const math3d::vector4 & position_, const math3d::vector4 & vector_) {
+        position = new math3d::vector4(position_);
+        vector = new math3d::vector4(vector_);
     }
     pbge::ModelInstance * createVectorInstance();
 private:
-    math3d::vector4 position;
-    math3d::vector4 vector;
-}
+    math3d::vector4 * position;
+    math3d::vector4 * vector;
+};
 
 #endif
