@@ -5,4 +5,7 @@
 *.pdb
 *.obj
 *.user
+*.exe
+*.ilk
+*.suo
 out/
