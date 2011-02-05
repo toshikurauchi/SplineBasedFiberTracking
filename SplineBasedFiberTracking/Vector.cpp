@@ -3,13 +3,14 @@
 #include "pbge/gfx/Model.h"
 #include "math3d/math3d.h"
 
+
 void createIndices(std::vector<unsigned short> & i) {
-    unsigned short indices[] = {0,0,0,0, 1,1,1,1};
+    unsigned short indices[] = {0,1};
     i = std::vector<unsigned short>(indices, indices + 8);
 }
 
 pbge::ModelInstance * Vector::createVectorInstance() {
-    pbge::VertexBufferBuilder builder(6);
+    pbge::VertexBufferBuilder builder(2);
     pbge::VertexAttribBuilder vertex = builder.addAttrib(3, pbge::VertexAttrib::VERTEX);
     pbge::VertexAttribBuilder color = builder.addAttrib(3, pbge::VertexAttrib::COLOR);
     
@@ -24,5 +25,5 @@ pbge::ModelInstance * Vector::createVectorInstance() {
             .pushValue(0,1,0).setAttribIndex(indices);
 
     pbge::VertexBuffer * vbo = builder.done();
-    return new pbge::ModelInstance(new pbge::VBOModel(vbo, GL_LINE));
+    return new pbge::ModelInstance(new pbge::VBOModel(vbo, GL_LINES));
 }
