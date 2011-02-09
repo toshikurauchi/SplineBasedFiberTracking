@@ -14,6 +14,7 @@
 #include <GL/glut.h>
 
 #include "Vector.h"
+#include "FieldGenerator.h"
 
 int cam_node_name;
 pbge::Renderer * renderer;
@@ -55,12 +56,12 @@ void setUp() {
 
     createVectorFieldFromFile(scene);
 
-    cam_node_name = scene->appendChildTo(pbge::SceneGraph::ROOT, pbge::TransformationNode::translation(0, 0, 8))->getSceneGraphIndex();
+    cam_node_name = scene->appendChildTo(pbge::SceneGraph::ROOT, pbge::TransformationNode::translation(0, 0, 100))->getSceneGraphIndex();
     
     pbge::CameraNode * cam = dynamic_cast<pbge::CameraNode*>(scene->appendChildTo(cam_node_name, new pbge::CameraNode()));
     scene->appendChildTo(cam_node_name, new pbge::PointLight);
     cam->lookAt(math3d::vector4(0,1,0),math3d::vector4(0,0,-1));
-    cam->setPerspective(45, 1, 1.0f, 10);
+    cam->setPerspective(20, 1, 10.0f, 100);
     renderer->setScene(scene);
 }
 
@@ -75,6 +76,7 @@ void display() {
 }
 
 int main(int argc, char **argv) {
+    FieldGenerator::generateFieldFile();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_RGBA|GLUT_DEPTH|GLUT_DOUBLE);
     glutInitWindowSize(500,500);
