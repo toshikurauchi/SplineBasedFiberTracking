@@ -8,6 +8,7 @@
 #include <string>
 
 #include "pbge/core/core.h"
+#include "pbge/gfx/OpenGL.h"
 #include "pbge/exceptions/exceptions.h"
 
 namespace pbge {
@@ -234,7 +235,7 @@ namespace pbge {
 
         VertexBufferBuilder & setAttribIndex(const std::vector<unsigned short> & indexes);
 
-        VertexBuffer * done(GLenum usage = GL_STATIC_DRAW);
+        VertexBuffer * done(GLenum usage, OpenGL * ogl);
 
     private:
         void validateAttribs();

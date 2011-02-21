@@ -1,6 +1,6 @@
 
-#ifndef gfxcamera_h_
-#define gfxcamera_h_
+#ifndef PBGE_GFX_CAMERA_H_
+#define PBGE_GFX_CAMERA_H_
 
 #include <string>
 

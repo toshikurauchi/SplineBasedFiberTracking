@@ -10,6 +10,7 @@
 #include "pbge/gfx/Node.h"
 #include "pbge/gfx/Renderer.h"
 #include "pbge/gfx/StateSet.h"
+#include "pbge/gfx/SceneInitializer.h"
 
 #include <GL/glut.h>
 
@@ -17,14 +18,15 @@
 #include "FieldGenerator.h"
 
 int cam_node_name;
-pbge::Renderer * renderer;
-pbge::SceneGraph * scene;
 
-void createVectorFieldFromFile(pbge::SceneGraph *scene) {
+void createVectorFieldFromFile(pbge::SceneGraph *scene, pbge::OpenGL * ogl) {
     std::ifstream inputFile("inputField.txt", std::ifstream::in);
     
-    int numberOfVectors = 0;
-    inputFile >> numberOfVectors;
+    int max_x = 0;
+    int max_y = 0;
+    int max_z = 0;
+    inputFile >> max_x >> max_y >> max_z;
+    int numberOfVectors = max_x * max_y * max_z;
     while(numberOfVectors--) {
         int pos_x, pos_y, pos_z;
         int vec_x, vec_y, vec_z;
@@ -38,7 +40,7 @@ void createVectorFieldFromFile(pbge::SceneGraph *scene) {
         math3d::vector4 pos = math3d::vector4(pos_x,pos_y,pos_z);
         math3d::vector4 vec = math3d::vector4(vec_x,vec_y,vec_z);
 
-        pbge::ModelInstance * vectorModel = Vector(pos, vec).createVectorInstance();
+        pbge::ModelInstance * vectorModel = Vector(pos, vec, ogl).createVectorInstance();
     
         pbge::Node * vectorPosNode = scene->appendChildTo(pbge::SceneGraph::ROOT, pbge::TransformationNode::translation(pos[0],pos[1],pos[2]));
         scene->appendChildTo(vectorPosNode, vectorModel);
@@ -46,45 +48,34 @@ void createVectorFieldFromFile(pbge::SceneGraph *scene) {
     inputFile.close();
 }
 
-void setUp() {
-    pbge::Manager::init();
-    pbge::Manager::getInstance()->getOpenGL()->enableMode(pbge::OpenGL::DEPTH_TEST);
-    glClearColor(0,0,0,0);
+class CustomSceneInitializer : public pbge::SceneInitializer {
+    pbge::SceneGraph * operator () (pbge::OpenGL * ogl) {
+        ogl->enableMode(pbge::OpenGL::DEPTH_TEST);
+        glClearColor(0,0,0,0);
 
-    renderer = new pbge::Renderer(pbge::Manager::getInstance()->getOpenGL());
-    scene = new pbge::SceneGraph(new pbge::TransformationNode);
+        pbge::SceneGraph * scene = new pbge::SceneGraph(new pbge::TransformationNode);
 
-    createVectorFieldFromFile(scene);
+        createVectorFieldFromFile(scene, ogl);
 
-    cam_node_name = scene->appendChildTo(pbge::SceneGraph::ROOT, pbge::TransformationNode::translation(0, 0, 100))->getSceneGraphIndex();
-    
-    pbge::CameraNode * cam = dynamic_cast<pbge::CameraNode*>(scene->appendChildTo(cam_node_name, new pbge::CameraNode()));
-    scene->appendChildTo(cam_node_name, new pbge::PointLight);
-    cam->lookAt(math3d::vector4(0,1,0),math3d::vector4(0,0,-1));
-    cam->setPerspective(20, 1, 10.0f, 100);
-    renderer->setScene(scene);
-}
-
-void display() {
-    renderer->render();
-    glutSwapBuffers();
-    GLenum err = glGetError();
-    while(err != GL_NO_ERROR) {
-        std::cout << gluErrorString(err) << std::endl;
-        err = glGetError();
+        cam_node_name = scene->appendChildTo(pbge::SceneGraph::ROOT, pbge::TransformationNode::translation(0, 0, 100))->getSceneGraphIndex();
+        
+        pbge::CameraNode * cam = dynamic_cast<pbge::CameraNode*>(scene->appendChildTo(cam_node_name, new pbge::CameraNode()));
+        scene->appendChildTo(cam_node_name, new pbge::PointLight);
+        cam->lookAt(math3d::vector4(0,1,0),math3d::vector4(0,0,-1));
+        cam->setPerspective(20, 1, 10.0f, 100);
+        
+        return scene;
     }
-}
+};
 
 int main(int argc, char **argv) {
     FieldGenerator::generateFieldFile();
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_RGBA|GLUT_DEPTH|GLUT_DOUBLE);
-    glutInitWindowSize(500,500);
-    glutCreateWindow("Spline Based MRI Fiber Tracking");
-    setUp();
-    glutDisplayFunc(display);
-    glutMainLoop();
-    delete scene;
-    delete renderer;
+    pbge::Manager *manager = new pbge::Manager;
+    manager->setWindowDimensions(500,500);
+    manager->setFullscreen(false);
+    manager->setWindowTitle("Spline Based MRI Fiber Tracking");
+    manager->setSceneInitializer(new CustomSceneInitializer);
+    manager->displayGraphics();
+    delete manager;
     return 0;
 }

@@ -3,8 +3,11 @@
 #ifndef PBGE_GFX_SHADERUNIFORM_H_
 #define PBGE_GFX_SHADERUNIFORM_H_
 
+
 #include <string>
 #include <sstream>
+
+#include "math3d/math3d.h"
 
 namespace pbge {
 
@@ -118,6 +121,10 @@ namespace pbge {
             values[1] = y;
             values[2] = z;
             values[3] = w;
+        }
+
+        void setValue(const math3d::vector4 & v) {
+            this->setValue(v[0], v[1], v[2], v[3]);
         }
 
         void bindValueOn(GPUProgram * program, const UniformInfo & info, OpenGL * ogl);

@@ -33,7 +33,9 @@ namespace pbge {
     };
 
 
-
+    /*
+        
+    */
     class PBGE_EXPORT StateSet {
     public:
         StateSet(OpenGL * ogl);

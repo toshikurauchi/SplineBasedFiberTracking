@@ -11,10 +11,24 @@
 #include "pbge/core/core.h"
 
 namespace pbge {
+    class ResourceStorage;
     class StateSet;
     class Buffer;
     class UniformInfo;
     class UniformValue;
+    
+    class GLContext {
+    public:
+        virtual void makeCurrent() = 0;
+
+        virtual void swapBuffers() = 0;
+
+        virtual void release() = 0;
+
+        virtual void getSystemGLContext(void * p_context) = 0;
+
+        virtual void getSystemDeviceContext(void * p_device) = 0;
+    };
 
     class PBGE_EXPORT OpenGL {
     public:
@@ -42,6 +56,22 @@ namespace pbge {
         OpenGL();
 
         ~OpenGL();
+        
+        void setContext(GLContext * newContext);
+
+        GLContext * getContext() {
+            return context;
+        }
+
+        void releaseContext ();
+
+        void makeContextCurrent() {
+            context->makeCurrent();
+        }
+
+        void swapBuffers() {
+            context->swapBuffers();
+        }
 
         virtual void setMatrixMode(GLenum mode);
 
@@ -67,7 +97,13 @@ namespace pbge {
 
         virtual void enableMode(Mode mode);
 
+        virtual void disableDrawBuffer();
+
+        virtual void enableDrawBuffer(GLenum buffer);
+
         virtual StateSet & getState() { return *state; }
+
+        virtual ResourceStorage & getStorage() { return *storage; }
 
         
         
@@ -201,6 +237,10 @@ namespace pbge {
         GLenum currentMatrixMode;
 
         StateSet * state;
+
+        ResourceStorage * storage;
+
+        GLContext * context;
     };
 
 }

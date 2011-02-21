@@ -24,6 +24,6 @@ pbge::ModelInstance * Vector::createVectorInstance() {
             .pushValue(0,1,0)
             .pushValue(0,1,0).setAttribIndex(indices);
 
-    pbge::VertexBuffer * vbo = builder.done();
+    pbge::VertexBuffer * vbo = builder.done(GL_STATIC_DRAW, this->ogl);
     return new pbge::ModelInstance(new pbge::VBOModel(vbo, GL_LINES));
 }

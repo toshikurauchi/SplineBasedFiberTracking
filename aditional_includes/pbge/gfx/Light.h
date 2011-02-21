@@ -20,7 +20,7 @@ namespace pbge {
 
         virtual bool isLightOn() = 0;
 
-        virtual GPUProgram * getLightPassProgram() = 0;
+        virtual GPUProgram * getLightPassProgram(OpenGL * ogl) = 0;
 
         virtual void setNecessaryUniforms(OpenGL * ogl, const math3d::matrix44 & viewTransform) = 0;
 
@@ -71,9 +71,9 @@ namespace pbge {
             return *position;
         }
 
-        GPUProgram * getLightPassProgram() {
+        GPUProgram * getLightPassProgram(OpenGL * ogl) {
             if(program == NULL)
-                return PointLight::getDefaultLightPassProgram();
+                return PointLight::getDefaultLightPassProgram(ogl);
             return program;
         }
 
@@ -89,11 +89,11 @@ namespace pbge {
         }
 
     public:
-        static Shader * getDefaultLightPassVS();
+        static Shader * getDefaultLightPassVS(OpenGL * ogl);
 
-        static Shader * getDefaultLightPassFS();
+        static Shader * getDefaultLightPassFS(OpenGL * ogl);
 
-        static GPUProgram * getDefaultLightPassProgram();
+        static GPUProgram * getDefaultLightPassProgram(OpenGL * ogl);
 
     private:
         math3d::vector4 * position;

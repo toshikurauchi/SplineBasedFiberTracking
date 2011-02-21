@@ -78,14 +78,14 @@ namespace pbge {
             // malloc is used because raw data is needed
             this->data = malloc(size);
             if(this->data == NULL) {
-                Manager::getInstance()->writeErrorLog("ERROR: Out Of Memory for Buffer");
+//                Manager::getInstance()->writeErrorLog("ERROR: Out Of Memory for Buffer");
             }
             this->glID = 0;
         }
         
-        void release() {
+        void release(OpenGL * ogl) {
             if(glID) 
-                Manager::getInstance()->getOpenGL()->deleteBuffers(1, &glID);
+                ogl->deleteBuffers(1, &glID);
             if(this->data)
                 free(this->data);
         }

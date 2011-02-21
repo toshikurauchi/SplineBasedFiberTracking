@@ -8,7 +8,7 @@ void FieldGenerator::generateFieldFile() {
     int x_axis = 10;
     int y_axis = 10;
     int z_axis = 10;
-    outputFile << x_axis*y_axis*z_axis;
+    outputFile << x_axis << " " << y_axis << " " << z_axis << std::endl;
 
     for(int i = 0; i < y_axis; i++){
         for(int j = 0; j < x_axis; j++){

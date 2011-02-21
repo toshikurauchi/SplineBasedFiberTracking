@@ -10,6 +10,7 @@
 namespace pbge {
     class VertexBuffer;
     class ModelInstance;
+    class GPUProgram;
 
     class PBGE_EXPORT Model{
     public:
@@ -30,6 +31,28 @@ namespace pbge {
         GLenum primitive;
     };
 
+    class PBGE_EXPORT BezierCurve : public Model {
+    public:
+        BezierCurve();
+        
+        void addControlPoint(const float & x, const float & y, const float & z, const float & w);
+
+        void render(ModelInstance * instance, OpenGL * ogl);
+
+        void renderDepth(ModelInstance * instance, OpenGL * ogl);
+
+        void setEvaluator(GPUProgram * _evaluator) {
+            evaluator = _evaluator;
+        }
+
+        GPUProgram * getEvaluator(OpenGL * ogl);
+    private:
+        float * controlPoints;
+
+        GPUProgram * evaluator;
+
+        int currentIndex;
+    };
 
     class PBGE_EXPORT ModelInstance : public Node {
     public:

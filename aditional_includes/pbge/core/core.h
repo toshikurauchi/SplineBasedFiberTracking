@@ -7,6 +7,7 @@
 
 #ifdef _MSC_VER
     // Disable the deprecation warning
+
     #pragma warning(disable: 4996)
     #pragma warning(disable: 4251)
     #pragma warning(disable: 4275)
