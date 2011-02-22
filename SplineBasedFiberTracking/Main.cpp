@@ -16,36 +16,13 @@
 
 #include "Vector.h"
 #include "FieldGenerator.h"
+#include "Field.h"
 
 int cam_node_name;
 
 void createVectorFieldFromFile(pbge::SceneGraph *scene, pbge::OpenGL * ogl) {
-    std::ifstream inputFile("inputField.txt", std::ifstream::in);
-    
-    int max_x = 0;
-    int max_y = 0;
-    int max_z = 0;
-    inputFile >> max_x >> max_y >> max_z;
-    int numberOfVectors = max_x * max_y * max_z;
-    while(numberOfVectors--) {
-        int pos_x, pos_y, pos_z;
-        int vec_x, vec_y, vec_z;
-        inputFile >> pos_x;
-        inputFile >> pos_y;
-        inputFile >> pos_z;
-        inputFile >> vec_x;
-        inputFile >> vec_y;
-        inputFile >> vec_z;
-
-        math3d::vector4 pos = math3d::vector4(pos_x,pos_y,pos_z);
-        math3d::vector4 vec = math3d::vector4(vec_x,vec_y,vec_z);
-
-        pbge::ModelInstance * vectorModel = Vector(pos, vec, ogl).createVectorInstance();
-    
-        pbge::Node * vectorPosNode = scene->appendChildTo(pbge::SceneGraph::ROOT, pbge::TransformationNode::translation(pos[0],pos[1],pos[2]));
-        scene->appendChildTo(vectorPosNode, vectorModel);
-    }
-    inputFile.close();
+    Field * field = Field::fromFile("inputField.txt", ogl);
+    field->insertIntoScene(scene, ogl);
 }
 
 class CustomSceneInitializer : public pbge::SceneInitializer {

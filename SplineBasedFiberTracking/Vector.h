@@ -12,6 +12,7 @@ public:
         ogl = ogl_;
     }
     pbge::ModelInstance * createVectorInstance();
+    math3d::vector4 * getPosition() {return this->position;}
 private:
     math3d::vector4 * position;
     math3d::vector4 * vector;
