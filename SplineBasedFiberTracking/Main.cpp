@@ -23,6 +23,7 @@ int cam_node_name;
 void createVectorFieldFromFile(pbge::SceneGraph *scene, pbge::OpenGL * ogl) {
     Field * field = Field::fromFile("inputField.txt", ogl);
     field->insertIntoScene(scene, ogl);
+    field->getInterpolatedVector(1.4, 2.2, 4.8);
 }
 
 class CustomSceneInitializer : public pbge::SceneInitializer {

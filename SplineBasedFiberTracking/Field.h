@@ -13,6 +13,7 @@ class Field
 public:
     static Field * fromFile(std::string fileName, pbge::OpenGL * ogl);
     void insertIntoScene(pbge::SceneGraph *scene, pbge::OpenGL * ogl);
+    Vector * getInterpolatedVector(float x, float y, float z);
 private:
     Field(int x, int y, int z);
     Vector ***field;
